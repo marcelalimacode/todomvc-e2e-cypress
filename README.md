@@ -38,12 +38,26 @@ Ter o app no repositório deixa o projeto independente de sites externos: os tes
 | CT07 | Filtrar | Ver só as tarefas concluídas | Positivo | Só as concluídas aparecem no filtro "Concluídas" |
 | CT08 | Apagar | Limpar as tarefas concluídas | Positivo | As concluídas somem da lista |
 
+## Cenários em BDD
+
+Antes de automatizar, os 8 cenários foram escritos em Gherkin, em linguagem de negócio, no arquivo [`bdd/tarefas.feature`](bdd/tarefas.feature). Cada cenário tem a tag do seu ID (`@CT01` a `@CT08`), o que liga a especificação ao teste automatizado de mesmo nome em `tarefas.spec.js`.
+
+```gherkin
+@CT04 @concluir @smoke
+Cenário: Marcar uma tarefa como concluída
+  Quando marco "Pagar a conta de luz" como concluída
+  Então "Pagar a conta de luz" aparece riscada
+  E o contador mostra 1 tarefa pendente
+```
+
 ## Estrutura do projeto
 
 ```
 todomvc-e2e-cypress/
 ├── app/
 │   └── index.html              # O app testado (todo.qa)
+├── bdd/
+│   └── tarefas.feature         # Os 8 cenários em Gherkin
 ├── cypress/
 │   ├── integration/
 │   │   └── tarefas.spec.js     # Os 8 cenários

@@ -38,6 +38,18 @@ Keeping the app in the repository makes the project independent from external si
 | CT07 | Filter | Show only completed tasks | Positive | Only completed tasks show under "Concluídas" (completed) |
 | CT08 | Delete | Clear completed tasks | Positive | Completed tasks are removed |
 
+## BDD scenarios
+
+Before automating, the 8 scenarios were written in Gherkin, in business language, in [`bdd/tarefas.feature`](bdd/tarefas.feature) (written in Portuguese). Each scenario is tagged with its ID (`@CT01` to `@CT08`), linking the specification to the automated test with the same name in `tarefas.spec.js`.
+
+```gherkin
+@CT04 @concluir @smoke
+Cenário: Marcar uma tarefa como concluída
+  Quando marco "Pagar a conta de luz" como concluída
+  Então "Pagar a conta de luz" aparece riscada
+  E o contador mostra 1 tarefa pendente
+```
+
 ## Project structure
 
 The project files are named in Portuguese.
@@ -46,6 +58,8 @@ The project files are named in Portuguese.
 todomvc-e2e-cypress/
 ├── app/
 │   └── index.html              # The app under test (todo.qa)
+├── bdd/
+│   └── tarefas.feature         # The 8 scenarios in Gherkin
 ├── cypress/
 │   ├── integration/
 │   │   └── tarefas.spec.js     # The 8 scenarios
