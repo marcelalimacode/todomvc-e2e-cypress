@@ -1,0 +1,97 @@
+# TodoMVC E2E Tests · Cypress
+
+[![Cypress E2E tests](https://github.com/marcelalimacode/todomvc-e2e-cypress/actions/workflows/tests.yml/badge.svg)](https://github.com/marcelalimacode/todomvc-e2e-cypress/actions/workflows/tests.yml)
+![Cypress](https://img.shields.io/badge/Cypress-13-17202C?logo=cypress&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
+![Node.js](https://img.shields.io/badge/Node.js-339933?logo=nodedotjs&logoColor=white)
+
+[Português](README.md) · **English**
+
+## About
+
+End-to-end tests for a to-do list app: creating, completing, editing, filtering and clearing tasks.
+The tests drive the UI like a real user, and run automatically on every push with GitHub Actions, recording a video of each run.
+
+## Application under test
+
+[Cypress TodoMVC](https://example.cypress.io/todo), a version of the classic TodoMVC maintained by the Cypress team for automation practice. The app opens with two sample tasks and needs no login.
+
+## Tech stack
+
+- **Cypress 13**
+- **JavaScript**
+- **Node.js**
+- **GitHub Actions** for continuous integration
+
+## Test scenarios
+
+| ID | Feature | Scenario | Type | Expected result |
+| --- | --- | --- | --- | --- |
+| CT01 | List | Open the app with the sample tasks | Positive | The list shows 2 tasks |
+| CT02 | Create | Add a new task | Positive | The task appears at the end and the counter goes up |
+| CT03 | Create | Try to add an empty task | Negative | Nothing is added |
+| CT04 | Complete | Mark a task as completed | Positive | The task is struck through and the counter goes down |
+| CT05 | Edit | Edit a task's text | Positive | The text changes and is saved |
+| CT06 | Filter | Show only active tasks | Positive | Only open tasks are shown |
+| CT07 | Filter | Show only completed tasks | Positive | Only completed tasks are shown |
+| CT08 | Delete | Clear completed tasks | Positive | Completed tasks are removed |
+
+## Project structure
+
+The project files are named in Portuguese.
+
+```
+todomvc-e2e-cypress/
+├── cypress/
+│   ├── e2e/
+│   │   └── tarefas.cy.js       # The 8 scenarios
+│   ├── fixtures/
+│   │   └── tarefas.json        # Texts used by the tests
+│   └── support/
+│       ├── elementos.js        # All locators in one place
+│       ├── commands.js         # Reusable actions (add, complete, filter)
+│       └── e2e.js              # Loads the commands before the tests
+├── .github/workflows/tests.yml # CI pipeline
+├── cypress.config.js           # App URL and settings
+└── package.json
+```
+
+## Design decisions
+
+- **Custom commands.** Actions such as `cy.adicionarTarefa()` (add task) and `cy.concluirTarefa()` (complete task) keep the tests short and readable.
+- **Centralized locators.** All of them live in `elementos.js`, so a UI change is fixed in one place.
+- **Data in a fixture.** Task texts live in `tarefas.json`, outside the test code.
+- **Independent tests.** Every test opens the app from scratch, so tests can run in any order.
+- **Evidence.** Cypress records a video of each run and takes a screenshot when a test fails.
+
+## How to run
+
+Requirements: Node.js 18 or newer.
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/marcelalimacode/todomvc-e2e-cypress.git
+cd todomvc-e2e-cypress
+
+# 2. Install Cypress
+npm install
+
+# 3a. Open the Cypress window and watch the tests live
+npm run cy:open
+
+# 3b. Or run everything from the terminal, headless
+npm test
+```
+
+In the Cypress window, choose **E2E Testing**, pick a browser and click `tarefas.cy.js`.
+
+## CI
+
+The workflow in `.github/workflows/tests.yml` runs on every push and pull request to `main`, and can also be started by hand from the **Actions** tab.
+It runs the tests and saves the videos (`videos-cypress`) and, when something fails, the screenshots (`prints-cypress`) as downloadable artifacts.
+
+## Author
+
+**Marcela Lima** · QA Analyst
+
+[LinkedIn](https://www.linkedin.com/in/marcela-lima-qa) · [GitHub](https://github.com/marcelalimacode)

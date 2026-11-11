@@ -1,0 +1,13 @@
+{
+  "name": "todomvc-e2e-cypress",
+  "version": "1.0.0",
+  "description": "Testes E2E de um app de lista de tarefas TodoMVC com Cypress",
+  "private": true,
+  "scripts": {
+    "cy:open": "cypress open",
+    "test": "cypress run"
+  },
+  "devDependencies": {
+    "cypress": "13.17.0"
+  }
+}
