@@ -1,5 +1,8 @@
 {
-  "iniciais": ["Pay electric bill", "Walk the dog"],
+  "iniciais": [
+    "Pagar a conta de luz",
+    "Passear com o cachorro"
+  ],
   "nova": "Estudar Cypress",
   "editada": "Estudar Cypress com calma",
   "outra": "Revisar o README"

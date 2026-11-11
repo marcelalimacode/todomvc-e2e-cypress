@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>todo.qa · Lista de tarefas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500&display=swap">
+<style>
+  /* Visual no estilo do portfólio: fundo escuro, roxo e toques de terminal */
+  :root {
+    --bg: #0e0c16;
+    --panel: #161325;
+    --panel-2: #1d1931;
+    --line: #2b2645;
+    --ink: #ece9f7;
+    --muted: #9c95bb;
+    --violet: #b794ff;
+    --violet-deep: #7c5cff;
+    --mint: #3edb8a;
+    --red: #ff6b8b;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+    --display: "Space Grotesk", system-ui, sans-serif;
+    --body: "Inter", system-ui, sans-serif;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(600px 300px at 80% -10%, rgba(124, 92, 255, .18), transparent 70%),
+      var(--bg);
+    color: var(--ink);
+    font-family: var(--body);
+    display: flex;
+    justify-content: center;
+    padding: 56px 16px;
+  }
+  .app { width: 100%; max-width: 560px; display: flex; flex-direction: column; gap: 18px; }
+
+  .prompt { font-family: var(--mono); font-size: 13px; color: var(--violet); }
+  .prompt b { color: var(--mint); font-weight: 500; }
+  h1 { margin: 4px 0 0; font-family: var(--display); font-size: 40px; letter-spacing: -.02em; }
+  h1 span { color: var(--violet); }
+
+  .progress { display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .bar { flex: 1; height: 6px; background: var(--panel-2); border-radius: 99px; overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--violet-deep), var(--violet)); border-radius: 99px; transition: width .35s ease; }
+
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+
+  .new-wrap { display: flex; align-items: center; gap: 10px; padding: 0 18px; border-bottom: 1px solid var(--line); }
+  .new-wrap span { font-family: var(--mono); color: var(--violet); }
+  .new-todo {
+    flex: 1; min-width: 0; background: transparent; border: 0; outline: 0;
+    color: var(--ink); font: 16px var(--body); padding: 18px 0;
+  }
+  .new-todo::placeholder { color: var(--muted); }
+  .new-wrap:focus-within { box-shadow: inset 0 -2px 0 var(--violet-deep); }
+
+  .todo-list { list-style: none; margin: 0; padding: 0; }
+  .todo-list li { position: relative; border-bottom: 1px solid var(--line); animation: entra .25s ease; }
+  .todo-list li:last-child { border-bottom: 0; }
+  @keyframes entra { from { opacity: 0; transform: translateY(-4px); } }
+  .view { display: flex; align-items: center; gap: 14px; padding: 14px 18px; }
+  .toggle {
+    appearance: none; -webkit-appearance: none; margin: 0; flex: none;
+    width: 22px; height: 22px; border-radius: 7px; border: 1.5px solid var(--muted);
+    display: grid; place-items: center; cursor: pointer; transition: .15s;
+  }
+  .toggle:hover { border-color: var(--violet); }
+  .toggle:checked { background: var(--violet-deep); border-color: var(--violet-deep); }
+  .toggle:checked::after { content: ""; width: 6px; height: 11px; border: solid #fff; border-width: 0 2px 2px 0; transform: translateY(-1px) rotate(45deg); }
+  .toggle:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+  label { flex: 1; min-width: 0; font-size: 16px; line-height: 1.4; word-break: break-word; cursor: text; transition: color .15s; }
+  li.completed label { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--violet); }
+  .destroy {
+    background: none; border: 0; color: var(--muted); cursor: pointer; width: 28px; height: 28px;
+    border-radius: 8px; opacity: 0; transition: .15s; position: relative; flex: none;
+  }
+  .destroy::before, .destroy::after { content: ""; position: absolute; left: 7px; top: 13px; width: 14px; height: 1.5px; background: currentColor; }
+  .destroy::before { transform: rotate(45deg); }
+  .destroy::after { transform: rotate(-45deg); }
+  li:hover .destroy, .destroy:focus-visible { opacity: 1; }
+  .destroy:hover { color: var(--red); background: rgba(255, 107, 139, .1); }
+  .edit { display: none; width: 100%; background: var(--panel-2); border: 0; outline: 2px solid var(--violet-deep); color: var(--ink); font: 16px var(--body); padding: 14px 18px 14px 54px; }
+  li.editing .view { display: none; }
+  li.editing .edit { display: block; }
+
+  .empty { padding: 28px 18px; text-align: center; font-family: var(--mono); font-size: 13px; color: var(--muted); }
+
+  .footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 18px; border-top: 1px solid var(--line); background: var(--panel-2); font-size: 13px; color: var(--muted); }
+  .todo-count strong { color: var(--ink); font-weight: 500; }
+  .filters { list-style: none; display: flex; gap: 4px; margin: 0; padding: 0; }
+  .filters a { display: block; padding: 5px 11px; border-radius: 99px; color: var(--muted); text-decoration: none; border: 1px solid transparent; }
+  .filters a:hover { color: var(--ink); }
+  .filters a.selected { color: var(--violet); border-color: var(--violet-deep); background: rgba(124, 92, 255, .12); }
+  .clear-completed { background: none; border: 0; color: var(--muted); font: inherit; cursor: pointer; padding: 5px 0; }
+  .clear-completed:hover { color: var(--red); }
+
+  .hint { text-align: center; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .hint b { color: var(--violet); font-weight: 500; }
+
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+  <main class="app">
+    <header>
+      <div class="prompt">&gt; ./todo <b>--qa</b></div>
+      <h1>Minhas tarefas<span>_</span></h1>
+    </header>
+
+    <div class="progress" aria-live="polite">
+      <div class="bar"><i id="barra"></i></div>
+      <span id="percentual">0% concluído</span>
+    </div>
+
+    <section class="card">
+      <div class="new-wrap">
+        <span aria-hidden="true">+</span>
+        <input class="new-todo" placeholder="O que precisa ser feito?" aria-label="Nova tarefa" autofocus>
+      </div>
+      <ul class="todo-list"></ul>
+      <p class="empty" hidden>Nenhuma tarefa por aqui.</p>
+      <footer class="footer">
+        <span class="todo-count"></span>
+        <ul class="filters">
+          <li><a href="#/" data-filtro="todas">Todas</a></li>
+          <li><a href="#/active" data-filtro="ativas">Ativas</a></li>
+          <li><a href="#/completed" data-filtro="concluidas">Concluídas</a></li>
+        </ul>
+        <button class="clear-completed" type="button" hidden>Limpar concluídas</button>
+      </footer>
+    </section>
+
+    <p class="hint">Clique duas vezes numa tarefa para <b>editar</b></p>
+  </main>
+
+<script>
+  // Estado do app: começa sempre com duas tarefas de exemplo
+  let tarefas = [
+    { id: 1, texto: 'Pagar a conta de luz', concluida: false },
+    { id: 2, texto: 'Passear com o cachorro', concluida: false }
+  ]
+  let proximoId = 3
+
+  const lista = document.querySelector('.todo-list')
+  const campo = document.querySelector('.new-todo')
+  const contador = document.querySelector('.todo-count')
+  const botaoLimpar = document.querySelector('.clear-completed')
+  const vazio = document.querySelector('.empty')
+  const barra = document.getElementById('barra')
+  const percentual = document.getElementById('percentual')
+
+  function filtroAtual () {
+    if (location.hash === '#/active') return 'ativas'
+    if (location.hash === '#/completed') return 'concluidas'
+    return 'todas'
+  }
+
+  function visiveis () {
+    const filtro = filtroAtual()
+    if (filtro === 'ativas') return tarefas.filter(t => !t.concluida)
+    if (filtro === 'concluidas') return tarefas.filter(t => t.concluida)
+    return tarefas
+  }
+
+  function desenhar () {
+    lista.innerHTML = ''
+    visiveis().forEach(tarefa => {
+      const li = document.createElement('li')
+      li.dataset.id = tarefa.id
+      if (tarefa.concluida) li.classList.add('completed')
+
+      const view = document.createElement('div')
+      view.className = 'view'
+      const caixa = document.createElement('input')
+      caixa.className = 'toggle'
+      caixa.type = 'checkbox'
+      caixa.checked = tarefa.concluida
+      caixa.setAttribute('aria-label', 'Concluir tarefa')
+      const label = document.createElement('label')
+      label.textContent = tarefa.texto
+      const apagar = document.createElement('button')
+      apagar.className = 'destroy'
+      apagar.type = 'button'
+      apagar.setAttribute('aria-label', 'Apagar tarefa')
+      view.append(caixa, label, apagar)
+
+      const edicao = document.createElement('input')
+      edicao.className = 'edit'
+      edicao.value = tarefa.texto
+
+      li.append(view, edicao)
+      lista.append(li)
+    })
+
+    const pendentes = tarefas.filter(t => !t.concluida).length
+    const concluidas = tarefas.length - pendentes
+    contador.innerHTML = `<strong>${pendentes}</strong> ${pendentes === 1 ? 'tarefa pendente' : 'tarefas pendentes'}`
+    botaoLimpar.hidden = concluidas === 0
+    vazio.hidden = visiveis().length > 0
+
+    const pct = tarefas.length ? Math.round(concluidas / tarefas.length * 100) : 0
+    barra.style.width = pct + '%'
+    percentual.textContent = pct + '% concluído'
+
+    document.querySelectorAll('.filters a').forEach(a => {
+      a.classList.toggle('selected', a.dataset.filtro === filtroAtual())
+    })
+  }
+
+  function idDe (elemento) {
+    return Number(elemento.closest('li').dataset.id)
+  }
+
+  // Adicionar: Enter no campo. Texto vazio ou só com espaços não entra.
+  campo.addEventListener('keydown', evento => {
+    if (evento.key !== 'Enter') return
+    const texto = campo.value.trim()
+    if (!texto) return
+    tarefas.push({ id: proximoId++, texto, concluida: false })
+    campo.value = ''
+    desenhar()
+  })
+
+  // Concluir e apagar
+  lista.addEventListener('change', evento => {
+    if (!evento.target.matches('.toggle')) return
+    const tarefa = tarefas.find(t => t.id === idDe(evento.target))
+    tarefa.concluida = evento.target.checked
+    desenhar()
+  })
+  lista.addEventListener('click', evento => {
+    if (!evento.target.matches('.destroy')) return
+    tarefas = tarefas.filter(t => t.id !== idDe(evento.target))
+    desenhar()
+  })
+
+  // Editar: duplo clique abre, Enter ou sair do campo salva, Esc cancela
+  lista.addEventListener('dblclick', evento => {
+    if (!evento.target.matches('label')) return
+    const li = evento.target.closest('li')
+    li.classList.add('editing')
+    const edicao = li.querySelector('.edit')
+    edicao.focus()
+    edicao.setSelectionRange(edicao.value.length, edicao.value.length)
+  })
+  function salvarEdicao (edicao) {
+    const li = edicao.closest('li')
+    if (!li || !li.classList.contains('editing')) return
+    const id = idDe(edicao)
+    const texto = edicao.value.trim()
+    if (texto) tarefas.find(t => t.id === id).texto = texto
+    else tarefas = tarefas.filter(t => t.id !== id)
+    desenhar()
+  }
+  lista.addEventListener('keydown', evento => {
+    if (!evento.target.matches('.edit')) return
+    if (evento.key === 'Enter') salvarEdicao(evento.target)
+    if (evento.key === 'Escape') desenhar()
+  })
+  lista.addEventListener('focusout', evento => {
+    if (evento.target.matches('.edit')) salvarEdicao(evento.target)
+  })
+
+  botaoLimpar.addEventListener('click', () => {
+    tarefas = tarefas.filter(t => !t.concluida)
+    desenhar()
+  })
+
+  window.addEventListener('hashchange', desenhar)
+  desenhar()
+</script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 import { elementos } from '../support/elementos'
 
-describe('Lista de tarefas (TodoMVC)', () => {
+describe('Lista de tarefas (todo.qa)', () => {
   let tarefas
 
   before(() => {
@@ -53,7 +53,7 @@ describe('Lista de tarefas (TodoMVC)', () => {
 
   it('CT06 - Ver só as tarefas ativas', () => {
     cy.concluirTarefa(tarefas.iniciais[0])
-    cy.filtrarPor('Active')
+    cy.filtrarPor('Ativas')
 
     cy.get(elementos.itensDaLista).should('have.length', 1)
     cy.get(elementos.itensDaLista).first().should('have.text', tarefas.iniciais[1])
@@ -61,7 +61,7 @@ describe('Lista de tarefas (TodoMVC)', () => {
 
   it('CT07 - Ver só as tarefas concluídas', () => {
     cy.concluirTarefa(tarefas.iniciais[0])
-    cy.filtrarPor('Completed')
+    cy.filtrarPor('Concluídas')
 
     cy.get(elementos.itensDaLista).should('have.length', 1)
     cy.get(elementos.itensDaLista).first().should('have.text', tarefas.iniciais[0])

@@ -3,7 +3,8 @@ import { elementos } from './elementos'
 // Ações reutilizáveis, escritas como o usuário faria
 
 Cypress.Commands.add('abrirApp', () => {
-  cy.visit('/todo')
+  // Abre o app do próprio repositório (pasta app/)
+  cy.visit('app/index.html')
   cy.get(elementos.campoNovaTarefa).should('be.visible')
 })
 

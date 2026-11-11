@@ -1,4 +1,4 @@
-# TodoMVC E2E Tests · Cypress
+# todo.qa E2E Tests · Cypress
 
 [![Cypress E2E tests](https://github.com/marcelalimacode/todomvc-e2e-cypress/actions/workflows/tests.yml/badge.svg)](https://github.com/marcelalimacode/todomvc-e2e-cypress/actions/workflows/tests.yml)
 ![Cypress](https://img.shields.io/badge/Cypress-9-17202C?logo=cypress&logoColor=white)
@@ -14,7 +14,9 @@ The tests drive the UI like a real user, and run automatically on every push wit
 
 ## Application under test
 
-[Cypress TodoMVC](https://example.cypress.io/todo), a version of the classic TodoMVC maintained by the Cypress team for automation practice. The app opens with two sample tasks and needs no login.
+A custom to-do app, **todo.qa**, kept in the `app/` folder of this repository. It follows the classic [TodoMVC](https://todomvc.com) pattern (same features and same elements) with its own look: dark background, purple accents and a terminal feel.
+
+Keeping the app in the repository makes the project independent from external sites: tests always run against the same version, and the app opens straight from the file, with no server.
 
 ## Tech stack
 
@@ -32,8 +34,8 @@ The tests drive the UI like a real user, and run automatically on every push wit
 | CT03 | Create | Try to add an empty task | Negative | Nothing is added |
 | CT04 | Complete | Mark a task as completed | Positive | The task is struck through and the counter goes down |
 | CT05 | Edit | Edit a task's text | Positive | The text changes and is saved |
-| CT06 | Filter | Show only active tasks | Positive | Only open tasks are shown |
-| CT07 | Filter | Show only completed tasks | Positive | Only completed tasks are shown |
+| CT06 | Filter | Show only active tasks | Positive | Only open tasks show under "Ativas" (active) |
+| CT07 | Filter | Show only completed tasks | Positive | Only completed tasks show under "Concluídas" (completed) |
 | CT08 | Delete | Clear completed tasks | Positive | Completed tasks are removed |
 
 ## Project structure
@@ -42,6 +44,8 @@ The project files are named in Portuguese.
 
 ```
 todomvc-e2e-cypress/
+├── app/
+│   └── index.html              # The app under test (todo.qa)
 ├── cypress/
 │   ├── integration/
 │   │   └── tarefas.spec.js     # The 8 scenarios
@@ -52,7 +56,7 @@ todomvc-e2e-cypress/
 │       ├── commands.js         # Reusable actions (add, complete, filter)
 │       └── index.js            # Loads the commands before the tests
 ├── .github/workflows/tests.yml # CI pipeline
-├── cypress.json                # App URL and settings
+├── cypress.json                # Cypress settings
 └── package.json
 ```
 
@@ -61,6 +65,7 @@ todomvc-e2e-cypress/
 - **Custom commands.** Actions such as `cy.adicionarTarefa()` (add task) and `cy.concluirTarefa()` (complete task) keep the tests short and readable.
 - **Centralized locators.** All of them live in `elementos.js`, so a UI change is fixed in one place.
 - **Data in a fixture.** Task texts live in `tarefas.json`, outside the test code.
+- **Own app.** Tests do not depend on a third-party site that may change or go offline.
 - **Independent tests.** Every test opens the app from scratch, so tests can run in any order.
 - **Evidence.** Cypress records a video of each run and takes a screenshot when a test fails.
 
@@ -75,6 +80,8 @@ cd todomvc-e2e-cypress
 
 # 2. Install Cypress
 npm install
+
+# To see only the app: open app/index.html in your browser
 
 # 3a. Open the Cypress window and watch the tests live
 npm run cy:open
