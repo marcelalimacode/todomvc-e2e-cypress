@@ -13,8 +13,16 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "16"
+
+      - name: Install Cypress
+        run: npm install
+
       - name: Run Cypress tests
-        uses: cypress-io/github-action@v6
+        run: npx cypress run
 
       - name: Upload videos
         if: always()

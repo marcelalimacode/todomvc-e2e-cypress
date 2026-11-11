@@ -1,0 +1,7 @@
+{
+  "baseUrl": "https://example.cypress.io",
+  "viewportWidth": 1280,
+  "viewportHeight": 800,
+  "video": true,
+  "pluginsFile": false
+}

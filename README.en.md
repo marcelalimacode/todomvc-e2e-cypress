@@ -1,7 +1,7 @@
 # TodoMVC E2E Tests · Cypress
 
 [![Cypress E2E tests](https://github.com/marcelalimacode/todomvc-e2e-cypress/actions/workflows/tests.yml/badge.svg)](https://github.com/marcelalimacode/todomvc-e2e-cypress/actions/workflows/tests.yml)
-![Cypress](https://img.shields.io/badge/Cypress-13-17202C?logo=cypress&logoColor=white)
+![Cypress](https://img.shields.io/badge/Cypress-9-17202C?logo=cypress&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?logo=nodedotjs&logoColor=white)
 
@@ -18,7 +18,7 @@ The tests drive the UI like a real user, and run automatically on every push wit
 
 ## Tech stack
 
-- **Cypress 13**
+- **Cypress 9.7**
 - **JavaScript**
 - **Node.js**
 - **GitHub Actions** for continuous integration
@@ -43,16 +43,16 @@ The project files are named in Portuguese.
 ```
 todomvc-e2e-cypress/
 ├── cypress/
-│   ├── e2e/
-│   │   └── tarefas.cy.js       # The 8 scenarios
+│   ├── integration/
+│   │   └── tarefas.spec.js     # The 8 scenarios
 │   ├── fixtures/
 │   │   └── tarefas.json        # Texts used by the tests
 │   └── support/
 │       ├── elementos.js        # All locators in one place
 │       ├── commands.js         # Reusable actions (add, complete, filter)
-│       └── e2e.js              # Loads the commands before the tests
+│       └── index.js            # Loads the commands before the tests
 ├── .github/workflows/tests.yml # CI pipeline
-├── cypress.config.js           # App URL and settings
+├── cypress.json                # App URL and settings
 └── package.json
 ```
 
@@ -66,7 +66,7 @@ todomvc-e2e-cypress/
 
 ## How to run
 
-Requirements: Node.js 18 or newer.
+Requirements: Node.js 12 or newer. The project uses Cypress 9.7, the last version that supports Node 12.
 
 ```bash
 # 1. Clone the repository
@@ -83,7 +83,7 @@ npm run cy:open
 npm test
 ```
 
-In the Cypress window, choose **E2E Testing**, pick a browser and click `tarefas.cy.js`.
+In the Cypress window, pick a browser in the top right corner and click `tarefas.spec.js`.
 
 ## CI
 

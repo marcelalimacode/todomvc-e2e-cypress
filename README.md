@@ -1,7 +1,7 @@
 # Testes E2E do TodoMVC · Cypress
 
 [![Cypress E2E tests](https://github.com/marcelalimacode/todomvc-e2e-cypress/actions/workflows/tests.yml/badge.svg)](https://github.com/marcelalimacode/todomvc-e2e-cypress/actions/workflows/tests.yml)
-![Cypress](https://img.shields.io/badge/Cypress-13-17202C?logo=cypress&logoColor=white)
+![Cypress](https://img.shields.io/badge/Cypress-9-17202C?logo=cypress&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?logo=nodedotjs&logoColor=white)
 
@@ -18,7 +18,7 @@ Os testes rodam pela tela, como uma pessoa usando o app, e rodam automaticamente
 
 ## Tecnologias
 
-- **Cypress 13**
+- **Cypress 9.7**
 - **JavaScript**
 - **Node.js**
 - **GitHub Actions** para integração contínua
@@ -41,16 +41,16 @@ Os testes rodam pela tela, como uma pessoa usando o app, e rodam automaticamente
 ```
 todomvc-e2e-cypress/
 ├── cypress/
-│   ├── e2e/
-│   │   └── tarefas.cy.js       # Os 8 cenários
+│   ├── integration/
+│   │   └── tarefas.spec.js     # Os 8 cenários
 │   ├── fixtures/
 │   │   └── tarefas.json        # Textos usados nos testes
 │   └── support/
 │       ├── elementos.js        # Localizadores da tela em um só lugar
 │       ├── commands.js         # Ações reutilizáveis (adicionar, concluir, filtrar)
-│       └── e2e.js              # Carrega os comandos antes dos testes
+│       └── index.js            # Carrega os comandos antes dos testes
 ├── .github/workflows/tests.yml # Pipeline de CI
-├── cypress.config.js           # Endereço do app e configurações
+├── cypress.json                # Endereço do app e configurações
 └── package.json
 ```
 
@@ -64,7 +64,7 @@ todomvc-e2e-cypress/
 
 ## Como rodar
 
-Pré-requisito: Node.js 18 ou superior.
+Pré-requisito: Node.js 12 ou superior. O projeto usa o Cypress 9.7, a última versão compatível com o Node 12.
 
 ```bash
 # 1. Clonar o repositório
@@ -81,7 +81,7 @@ npm run cy:open
 npm test
 ```
 
-Na janela do Cypress, escolha **E2E Testing**, depois um navegador, e clique em `tarefas.cy.js`.
+Na janela do Cypress, escolha o navegador no canto superior direito e clique em `tarefas.spec.js`.
 
 ## CI
 
